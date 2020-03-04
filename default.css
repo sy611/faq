@@ -1,0 +1,8 @@
+body * {
+  white-space: pre-line;
+  word-wrap: break-word;
+}
+
+[v-cloak] {
+  display: none;
+}

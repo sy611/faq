@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+  <link href="default.css" rel="stylesheet">
+  <!-- <?!= css ?> -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+</head>
+
+<body>
+  <div id="app">
+    <v-app v-cloak>
+      <v-content>
+        <div class="main-area overflow-hidden">
+          <v-container style="height: 64px;" id="top-margin"></v-container>
+          <v-container>
+            <v-app-bar fixed color="primary darken-1" dark>
+              <v-app-bar-nav-icon @click="drawer.show = true"></v-app-bar-nav-icon>
+              <v-toolbar-title>FAQ</v-toolbar-title>
+            </v-app-bar>
+            <v-navigation-drawer
+              v-model="drawer.show"
+              absolute
+              temporary
+            >
+              <v-list nav dense>
+                <v-list-item-group v-model="drawer.selected" active-class="primary--text text--accent-4">
+                  <v-list-item>
+                    <v-list-item-icon>
+                      <v-icon>mdi-home</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>Home</v-list-item-title>
+                  </v-list-item>
+                  <v-list-item>
+                    <v-list-item-icon>
+                      <v-icon>mdi-account</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>Contact</v-list-item-title>
+                  </v-list-item>
+                </v-list-item-group>
+              </v-list>
+
+            </v-navigation-drawer>
+            <v-row>
+              <v-col cols="12">
+                <p>{{ JSON.stringify(drawer, null, 2) }}</p>
+                <p>{{ JSON.stringify(input, null, 2) }}</p>
+                <p>{{ JSON.stringify(keywordSplit, null, 2) }}</p>
+                <v-card class="pa-3 ma-2">
+                  <v-text-field
+                    label="検索キーワード"
+                    v-model="input.keyword"
+                  ></v-text-field>
+                  <v-btn color="primary darken-2" dark block>検索</v-btn>
+                </v-card>
+              </v-col>
+            </v-row>
+          </v-container>
+          <v-container style="height: 64px;"></v-container>
+        </div>
+      </v-content>
+    </v-app>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+  <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+  <script src="https://unpkg.com/vuex"></script>
+  <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.js"></script>
+  <script src="default.js"></script>
+  <!-- <?!= js ?> -->
+</body>
+
+</html>
