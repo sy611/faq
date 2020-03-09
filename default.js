@@ -42,19 +42,65 @@ const app = new Vue({
   vuetify,
   store,
   computed: {
-    keywordSplit() {
-      const keywordReplaced = this.input.keyword.replace(/　+/g, ' ')
-      return keywordReplaced.split(' ').filter(v => v)
+    arrWordSplit() {
+      // 全角スペースは半角スペースに置換、アルファベットはすべて小文字に置換
+      const wordReplaced = this.input.word.replace(/　+/g, ' ').toLowerCase()
+      // スペース連続などによって生まれる空文字を取り除く
+      return wordReplaced.split(' ').filter(v => v)
     },
-    filteredQuestions() {
-      console.log(this.$store.state.questions)
+    countAllQuestions() {
+      return this.$store.state.questions.length
+    }
+    // filteredQuestions() {
+    //   console.log(this.$store.state.questions)
+    //   const filtered = this.$store.state.questions.filter(q => {
+    //     const flag = this.arrWordSplit.every(word => {
+    //       // q.keywordにinput.wordが入ってるかどうかをチェック
+    //       const keywordLower = q.keyword.map(v => v.toLowerCase())
+    //       console.log(keywordLower)
+    //       console.log(`word = ${word}`)
+    //       if(keywordLower.includes(word)) {
+    //         return true
+    //       } else {
+    //         return false
+    //       }
+    //       // q.questionにinput.word入ってるかどうかをチェック
+
+    //       // return true
+    //     })
+    //     return flag
+    //   })
+    //   return filtered
+    // }
+  },
+  methods: {
+    getQuestionsByButton() {
+      console.log('button clicked')
+      this.$store.dispatch('getQuestions')
+    },
+    searchQuestions() {
+      console.log('function => searchQuestions')
+      this.showResultArea = true
       const filtered = this.$store.state.questions.filter(q => {
-        return true
+        const flag = this.arrWordSplit.every(word => {
+          // q.keywordにinput.wordが入ってるかどうかをチェック
+          const keywordLower = q.keyword.map(v => v.toLowerCase())
+          console.log(keywordLower)
+          console.log(`word = ${word}`)
+          if(keywordLower.includes(word)) {
+            return true
+          } else {
+            return false
+          }
+          // q.questionにinput.word入ってるかどうかをチェック
+
+          // return true
+        })
+        return flag
       })
-      return filtered
+      this.filteredQuestions = filtered
     }
   },
-  methods: {},
   data() {
     return {
       drawer: {
@@ -62,14 +108,22 @@ const app = new Vue({
         selected: ''
       },
       input: {
-        keyword: 'test'
+        word: '光'
       },
-      panel: [0]
+      showResultArea: false,
+      filteredQuestions: [],
+      panel: []
     }
   },
   mounted() {
     console.log('mounted')
-    this.$store.dispatch('getQuestions')
+    // this.$store.dispatch('getQuestions')
   }
 })
 // }).$mount('#app')
+
+
+const methodsSearch = {
+  checkKeyword() {}
+  
+}
