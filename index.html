@@ -26,7 +26,7 @@
           <v-icon>mdi-open-in-new</v-icon>
         </v-btn>
       </v-app-bar>
-      <v-navigation-drawer v-model="drawer.show" absolute temporary>
+      <!-- <v-navigation-drawer v-model="drawer.show" absolute temporary>
         <v-list nav dense>
           <v-list-item-group v-model="drawer.selected" active-class="primary--text text--accent-4">
             <v-list-item>
@@ -43,27 +43,48 @@
             </v-list-item>
           </v-list-item-group>
         </v-list>
-      </v-navigation-drawer>
+      </v-navigation-drawer> -->
+      <v-content>
+
       <v-content>
         <!-- <div class="main-area overflow-hidden"> -->
         <v-container style="height: 64px;" id="top-margin"></v-container>
-
         <v-container>
           <v-row>
             <v-col cols="12">
               <div id="search">
-                <v-btn class="ma-3" color="warning" @click="getQuestionsByButton">JSONをとってくる</v-btn>
+                <!-- <v-btn class="ma-3" color="warning" @click="getQuestionsByButton">JSONをとってくる</v-btn> -->
                 <!-- <p>{{ JSON.stringify(drawer, null, 2) }}</p>
                 <p>{{ JSON.stringify(input, null, 2) }}</p> -->
-                <p>{{ JSON.stringify(arrWordSplit, null, 2) }}</p>
+                <!-- <p>{{ JSON.stringify(arrWordSplit, null, 2) }}</p> -->
                 <!-- <p>{{ filteredQuestions }}</p> -->
                 <v-card class="pa-3 ma-2" outlined v-on:keydown.enter="searchQuestions">
                   <v-text-field label="検索キーワード" v-model="input.word"></v-text-field>
+                  <v-select 
+                    v-model="input.selectedCategories"
+                    :items="categories"
+                    label="カテゴリを選択してください(必須)"
+                    multiple 
+                    chips
+                  >
+                    <template v-slot:prepend-item>
+                      <v-list-item ripple @click="toggle">
+                        <v-list-item-action>
+                          <v-icon>{{ icon }}</v-icon>
+                        </v-list-item-action>
+                        <v-list-item-content>
+                          <v-list-item-title>Select All</v-list-item-title>
+                        </v-list-item-content>
+                      </v-list-item>
+                      <v-divider class="mt-2"></v-divider>
+                    </template>
+                  </v-select>
+                  
                   <v-btn 
                     color="primary darken-2" 
-                    dark 
                     block 
                     @click="searchQuestions"
+                    :disabled="input.selectedCategories.length === 0"
                   >
                     <span>検索</span>
                   </v-btn>
@@ -125,6 +146,17 @@
           </v-row>
         </v-container>
       </v-content>
+      <!--
+      <v-overlay class="text-center" color="white" opacity="1" :value="!countAllQuestions">
+        <v-progress-circular 
+          color="primary"
+          indeterminate
+          size="120"
+          width="7"
+        >
+        </v-progress-circular>
+      </v-overlay>
+      -->
     </v-app>
   </div>
   <!-- dev dependencies -->

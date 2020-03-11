@@ -50,28 +50,25 @@ const app = new Vue({
     },
     countAllQuestions() {
       return this.$store.state.questions.length
-    }
-    // filteredQuestions() {
-    //   console.log(this.$store.state.questions)
-    //   const filtered = this.$store.state.questions.filter(q => {
-    //     const flag = this.arrWordSplit.every(word => {
-    //       // q.keywordにinput.wordが入ってるかどうかをチェック
-    //       const keywordLower = q.keyword.map(v => v.toLowerCase())
-    //       console.log(keywordLower)
-    //       console.log(`word = ${word}`)
-    //       if(keywordLower.includes(word)) {
-    //         return true
-    //       } else {
-    //         return false
-    //       }
-    //       // q.questionにinput.word入ってるかどうかをチェック
+    },
+    categories() {
+      const arr = !!this.countAllQuestions
+        ? this.$store.state.questions.map(q => q.category)
+        : []
+      return [... new Set(arr)]
+    },
 
-    //       // return true
-    //     })
-    //     return flag
-    //   })
-    //   return filtered
-    // }
+    selectsAllCategory() {
+      return this.input.selectedCategories.length === this.categories.length
+    },
+    selectsSomeCategory() {
+      return this.input.selectedCategories.length > 0 && !this.selectsAllCategory
+    },
+    icon() {
+      if (this.selectsAllCategory) return 'mdi-close-box'
+      if (this.selectsSomeCategory) return 'mdi-minus-box'
+      return 'mdi-checkbox-blank-outline'
+    }
   },
   methods: {
     getQuestionsByButton() {
@@ -80,25 +77,68 @@ const app = new Vue({
     },
     searchQuestions() {
       console.log('function => searchQuestions')
+      if (!this.input.selectedCategories.slice().length) {
+        this.errorCategory = true
+        console.log('カテゴリ不足')
+        // ダイアログ処理
+        return
+      }
+
       this.showResultArea = true
       const filtered = this.$store.state.questions.filter(q => {
+        /* カテゴリによるフィルタリング */
+        // q.categoryがinput.selectedCategoriesに入ってるかどうかをチェック
+        // (入ってなければその時点でfalseを返す)
+        console.log(`input.selectedCategories = ${this.input.selectedCategories}`)
+        if(!this.input.selectedCategories.includes(q.category)) {
+          return false
+        }
+
+        /* 入力したキーワードによるフィルタリング */
+        // (マッチングが見つかった時点でtrueを返す、最後まで見つからなければfalse)
         const flag = this.arrWordSplit.every(word => {
+          console.log(`対象word => ${word}`)
+          // 質問に指定された検索キーワードとのマッチングを判定する
           // q.keywordにinput.wordが入ってるかどうかをチェック
           const keywordLower = q.keyword.map(v => v.toLowerCase())
-          console.log(keywordLower)
-          console.log(`word = ${word}`)
+          console.log(`keywordLower = ${keywordLower}`)
+
           if(keywordLower.includes(word)) {
             return true
-          } else {
-            return false
-          }
-          // q.questionにinput.word入ってるかどうかをチェック
+          } 
 
-          // return true
+          // 質問文とのマッチングを判定する
+          // q.questionにinput.wordが入ってるかどうかをチェック
+          const questionLower = q.question.toLowerCase()
+          console.log(`questionLower = ${questionLower}`)
+          if(questionLower.includes(word)) {
+            return true
+          }
+
+          // 回答文とのマッチングを判定する
+          // q.answerにinput.wordが入ってるかどうかをチェック
+          const answerLower = q.answer.toLowerCase()
+          console.log(`answerLower = ${answerLower}`)
+          if(answerLower.includes(word)) {
+            return true
+          }
+
+          // どこにもマッチしなかった = falseを返す
+          return false
         })
+        console.log(`flag = ${flag}`)
         return flag
       })
       this.filteredQuestions = filtered
+    },
+    toggle() {
+      this.$nextTick(() => {
+        if (this.selectsAllCategory) {
+          this.input.selectedCategories = []
+        } else {
+          this.input.selectedCategories = this.categories.slice()
+        }
+      })
     }
   },
   data() {
@@ -108,22 +148,17 @@ const app = new Vue({
         selected: ''
       },
       input: {
-        word: '光'
+        word: '',
+        selectedCategories: [],
       },
       showResultArea: false,
       filteredQuestions: [],
-      panel: []
+      panel: [],
+      overlay: true
     }
   },
   mounted() {
     console.log('mounted')
-    // this.$store.dispatch('getQuestions')
+    this.$store.dispatch('getQuestions')
   }
 })
-// }).$mount('#app')
-
-
-const methodsSearch = {
-  checkKeyword() {}
-  
-}
