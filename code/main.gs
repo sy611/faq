@@ -10,5 +10,5 @@ function doGet() {
   
   return temp.evaluate()
              .addMetaTag('viewport', 'initial-scale=1.0')
-             .setTitle('Material Search')
+             .setTitle('Helpdesk FAQ')
 }

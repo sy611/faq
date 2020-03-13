@@ -2,22 +2,22 @@
 const ns = {}
 ns.ss = SpreadsheetApp.getActive()
 ns.sh = {
-  faq: ns.ss.getSheetByName('records')
+  faq: ns.ss.getSheetByName('faq')
 }
 
 /* ===================================================================== */
 
 
-function getAllRecords() {
-  const [header, ...rows] = ns.sh.records.getDataRange().getValues()
+function getAllQuestions() {
+  const [header, ...rows] = ns.sh.faq.getDataRange().getValues()
   
-  const records = rows.map(function(row) {
-    const record = {}
+  const questions = rows.map(function(row) {
+    const question = {}
     header.forEach((v, i) => {
-      record[v] = row[i]
+      question[v] = row[i]
     })
-    record.keyword = record.keyword ? record.keyword.split(',') : []
-    return record
+    question.keyword = question.keyword ? question.keyword.split(',') : []
+    return question
   })
-  return JSON.stringify(records)
+  return JSON.stringify(questions)
 }
