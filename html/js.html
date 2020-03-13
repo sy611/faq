@@ -22,24 +22,16 @@ const store = new Vuex.Store({
   },
   mutations: {
     setQuestions(state, arr) {
-      // console.log(arr)
       state.questions = arr
     }
   },
   actions: {
     getQuestions({commit}) {
-      console.log('actions/getQuestions executing')
       google.script.run.withSuccessHandler(function(json) {
         commit('setQuestions', JSON.parse(json))
       }).getAllQuestions()
-      
-//      axios.get('./questions.json').then(res => {
-//        // console.log(res.data)
-//        commit('setQuestions', res.data)
-//      })
     }
   },
-  // getters: {}
 })
 
 
@@ -78,15 +70,11 @@ const app = new Vue({
   },
   methods: {
     getQuestionsByButton() {
-      console.log('button clicked')
       this.$store.dispatch('getQuestions')
     },
     searchQuestions() {
-      console.log('function => searchQuestions')
       if (!this.input.selectedCategories.slice().length) {
         this.errorCategory = true
-        console.log('カテゴリ不足')
-        // ダイアログ処理
         return
       }
 
@@ -95,7 +83,6 @@ const app = new Vue({
         /* カテゴリによるフィルタリング */
         // q.categoryがinput.selectedCategoriesに入ってるかどうかをチェック
         // (入ってなければその時点でfalseを返す)
-        console.log(`input.selectedCategories = ${this.input.selectedCategories}`)
         if(!this.input.selectedCategories.includes(q.category)) {
           return false
         }
@@ -103,11 +90,9 @@ const app = new Vue({
         /* 入力したキーワードによるフィルタリング */
         // (マッチングが見つかった時点でtrueを返す、最後まで見つからなければfalse)
         const flag = this.arrWordSplit.every(word => {
-          console.log(`対象word => ${word}`)
           // 質問に指定された検索キーワードとのマッチングを判定する
           // q.keywordにinput.wordが入ってるかどうかをチェック
           const keywordLower = q.keyword.map(v => v.toLowerCase())
-          console.log(`keywordLower = ${keywordLower}`)
 
           if(keywordLower.includes(word)) {
             return true
@@ -116,7 +101,6 @@ const app = new Vue({
           // 質問文とのマッチングを判定する
           // q.questionにinput.wordが入ってるかどうかをチェック
           const questionLower = q.question.toLowerCase()
-          console.log(`questionLower = ${questionLower}`)
           if(questionLower.includes(word)) {
             return true
           }
@@ -124,7 +108,6 @@ const app = new Vue({
           // 回答文とのマッチングを判定する
           // q.answerにinput.wordが入ってるかどうかをチェック
           const answerLower = q.answer.toLowerCase()
-          console.log(`answerLower = ${answerLower}`)
           if(answerLower.includes(word)) {
             return true
           }
@@ -132,7 +115,6 @@ const app = new Vue({
           // どこにもマッチしなかった = falseを返す
           return false
         })
-        console.log(`flag = ${flag}`)
         return flag
       })
       this.filteredQuestions = filtered
@@ -164,7 +146,6 @@ const app = new Vue({
     }
   },
   mounted() {
-    console.log('mounted')
     this.$store.dispatch('getQuestions')
   }
 })
