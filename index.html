@@ -19,7 +19,7 @@
         <v-spacer></v-spacer>
         <v-btn 
           text
-          href="https://www.tokyodisneyresort.jp"
+          href="https://docs.google.com/forms/d/e/1FAIpQLScscwL1vDZN-dBjyNpEuobrDtxxummSVMLHIWNBaNxEVEy6DQ/viewform"
           target="_blank"
         >
           <span>質問を投稿する</span>
@@ -53,11 +53,6 @@
           <v-row>
             <v-col cols="12">
               <div id="search">
-                <!-- <v-btn class="ma-3" color="warning" @click="getQuestionsByButton">JSONをとってくる</v-btn> -->
-                <!-- <p>{{ JSON.stringify(drawer, null, 2) }}</p>
-                <p>{{ JSON.stringify(input, null, 2) }}</p> -->
-                <!-- <p>{{ JSON.stringify(arrWordSplit, null, 2) }}</p> -->
-                <!-- <p>{{ filteredQuestions }}</p> -->
                 <v-card class="pa-3 ma-2" outlined v-on:keydown.enter="searchQuestions">
                   <v-text-field label="検索キーワード" v-model="input.word"></v-text-field>
                   <v-select 
